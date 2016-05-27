@@ -1,5 +1,5 @@
 var Sequelize = require('sequelize');
-
+//Connect to database
 var sequelize = new Sequelize('hackifieds', 'root', '', {
   host: 'localhost',
   dialect: 'mysql',
