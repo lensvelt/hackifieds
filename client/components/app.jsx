@@ -72,7 +72,6 @@ class App extends React.Component {
                   activeListing={this.state.activeListing}
                   listings={this.state.listings}/>
         <Filter handleFilterItemClick={this.handleFilterItemClick.bind(this)} listings={this.state.listings}/>
-        <button id="getButton" type="button" onClick={this.retrieveListings.bind(this)}>GET</button>
         <button id="postButton" type="button" onClick={this.sendListing.bind(this)}>POST</button>
       </div>
     );
