@@ -97,28 +97,38 @@ app.route('/api/users')
 console.log( 'hackifieds server listening on 3000....' );
 
 //-----------------------------------------
-//setting up github Oauth
+//Configure Passport Github oAuth strategy
 passport.use(new github({
-    clientID: 'XXXX',
-    clientSecret: 'XXXXXXXX',
-    callbackURL: "http://127.0.0.1:3000/auth/github/callback"
-  },
+  clientID: '769b6aadfc9c8cca0bcc',
+  clientSecret: 'd53b387b9f4a8987ddc81a337899bcfa31e0b0d7',
+  callbackURL: 'http://127.0.0.1:3000/auth/github/callback'
+},
   function(accessToken, refreshToken, profile, done) {
-    return done(null,profile)
-     }
+    console.log(profile);
+    db.User.findOrCreate({where: {username: profile.username}})
+           .spread(function(user, created) {
+             console.log('User: ', user);
+             console.log('Created: ', created);
+             return done(null, user);
+           });
+  }
 ));
 
 app.get('/api/auth/github',
  
-  passport.authenticate('github', { scope: [ 'user:email' ] }));
-
+  passport.authenticate('github', { scope: [ 'user:email' ] }),
+    function(req, res) {
+      console.log(req.isAuthenticated());
+    }
+  );
+  
 
 
 
 app.get('/auth/github/callback', 
   passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
-    console.log("hi")
+    console.log("hi");
     // Successful authentication, redirect home.
     res.redirect('/');
   });

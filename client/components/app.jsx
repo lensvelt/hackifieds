@@ -18,11 +18,15 @@ class App extends React.Component {
       navCategory: 'Rent',
 
       activeFilter: 'All',
+<<<<<<< 2bcb928bd7938d2dae975059971376460c6e139c
 <<<<<<< ac7969e830ba237c0ba518b7863776c828ed8045
       activeListing: null,
       currentUser: {}
 =======
       activeListing: null
+=======
+      activeListing: null,
+>>>>>>> Various Passport Github oAuth changes
       loggedIn: false
 >>>>>>> Working on getting github authentication to work; still need to finish implementing changing of loggedIn State when redirected from github back to homepage
     };
