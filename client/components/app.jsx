@@ -16,9 +16,15 @@ class App extends React.Component {
       users: [],
       listings: [],
       navCategory: 'Rent',
+
       activeFilter: 'All',
+<<<<<<< ac7969e830ba237c0ba518b7863776c828ed8045
       activeListing: null,
       currentUser: {}
+=======
+      activeListing: null
+      loggedIn: false
+>>>>>>> Working on getting github authentication to work; still need to finish implementing changing of loggedIn State when redirected from github back to homepage
     };
   }
 
@@ -69,6 +75,15 @@ class App extends React.Component {
     this.setState({ activeListing: null });
   }
 
+  loggedIn(){
+    this.setState({
+
+      loggedIn: true
+    });
+  }
+
+
+
   render () {
     return (
       <div className='app'>
@@ -85,6 +100,7 @@ class App extends React.Component {
                   activeFilter={this.state.activeFilter}
                   activeListing={this.state.activeListing}
                   listings={this.state.listings}/>
+<<<<<<< ac7969e830ba237c0ba518b7863776c828ed8045
             </Col>
           </Row>
         </Grid>
@@ -92,6 +108,21 @@ class App extends React.Component {
                     navCategory={this.state.navCategory}
                     user={this.state.currentUser}
                     clickHandler={this.sendListing.bind(this)}/>
+=======
+        <Filter listings={this.state.listings}/>
+        <button id="getButton" type="button" onClick={this.retrieveListings.bind(this)}>GET</button>
+        <button id="postButton" type="button" onClick={this.sendListing.bind(this)}>POST</button>
+        <p>
+          {this.state.loggedIn ? (
+            <a href="mailto:someone@example.com?Subject=Hello%20again" >Send mail!</a>) : 
+            (
+              <div>
+                <a href="/api/auth/github/" onClick={this.loggedIn.bind(this)}>Login</a>
+              </div>
+            ) 
+          }
+        </p>
+>>>>>>> Working on getting github authentication to work; still need to finish implementing changing of loggedIn State when redirected from github back to homepage
       </div>
     );
   }
