@@ -67,6 +67,33 @@ app.use ('/scripts', express.static(__dirname + '/../node_modules/jquery/dist/')
 app.use ('/scripts', express.static(__dirname + '/../node_modules/react/dist/'));
 app.use ('/scripts', express.static(__dirname + '/../node_modules/react-dom/dist/'));
 
+//-----------------------------------------
+//Configure Passport Github oAuth strategy
+passport.use(new github({
+  clientID: '769b6aadfc9c8cca0bcc',
+  clientSecret: 'd53b387b9f4a8987ddc81a337899bcfa31e0b0d7',
+  callbackURL: 'http://127.0.0.1:3000/auth/github/callback'
+},
+  function(accessToken, refreshToken, profile, done) {
+    console.log(profile);
+    db.User.findOrCreate({where: {username: profile.username}})
+           .spread(function(user, created) {
+             return done(null, user);
+           });
+  }
+));
+
+app.get('/api/auth/github',
+  passport.authenticate('github', { scope: [ 'user:email' ] }));
+
+app.get('/auth/github/callback', 
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, send userId of authenticated user
+    res.send({ userId: req.session.passport.user.dataValues.userId });
+  });
+
+
 // routing: handle endpoint requests from client
 app.route('/api/listings')
   .get(function(req, res) {
@@ -96,48 +123,17 @@ app.route('/api/users')
 // Start server, listen for client requests on designated port
 console.log( 'hackifieds server listening on 3000....' );
 
-//-----------------------------------------
-//Configure Passport Github oAuth strategy
-passport.use(new github({
-  clientID: '769b6aadfc9c8cca0bcc',
-  clientSecret: 'd53b387b9f4a8987ddc81a337899bcfa31e0b0d7',
-  callbackURL: 'http://127.0.0.1:3000/auth/github/callback'
-},
-  function(accessToken, refreshToken, profile, done) {
-    console.log(profile);
-    db.User.findOrCreate({where: {username: profile.username}})
-           .spread(function(user, created) {
-             console.log('User: ', user);
-             console.log('Created: ', created);
-             return done(null, user);
-           });
-  }
-));
 
-app.get('/api/auth/github',
-  passport.authenticate('github', { scope: [ 'user:email' ] }));
-
-app.get('/auth/github/callback', 
-  passport.authenticate('github', { failureRedirect: '/login' }),
-  function(req, res) {
-    console.log(req);
-    console.log("===================================================", req.session.passport.user);
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  });
-
-
-
-app.get('/login', function(req, res, next) {
-    res.redirect('/');
+// app.get('/login', function(req, res, next) {
+//     res.redirect('/');
   
-  });
+//   });
 
-app.get('/logout', function(req, res){
-  req.logout();
- // res.redirect('/')
-  return res.status(200).end();
-});
+// app.get('/logout', function(req, res){
+//   req.logout();
+//  // res.redirect('/')
+//   return res.status(200).end();
+// });
 
 // Set what we are listening on.
 app.listen(3000);

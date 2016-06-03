@@ -13,33 +13,33 @@ class App extends React.Component {
 
     this.state = {
       categories: [],
-      users: [],
+      // users: [],
       listings: [],
       navCategory: 'Rent',
       activeFilter: 'All',
       activeListing: null,
-      currentUser: {}
+      currentUserId: null
     };
   }
 
   componentWillMount () {
     this.retrieveCategories();
-    this.retrieveUsers();
+    // this.retrieveUsers();
     this.retrieveListings(this.state.navCategory);
-    this.setCurrentUserByName('malaneti');
+    // this.setCurrentUserByName('malaneti');
   }
 
   retrieveCategories () {
     helpers.getCategories( data => this.setState({categories: data}) );
   }
 
-  retrieveUsers () {
-    helpers.getUsers( data => this.setState({users: data}) );
-  }
+  // retrieveUsers () {
+  //   helpers.getUsers( data => this.setState({users: data}) );
+  // }
 
-  setCurrentUserByName (name) {
-    helpers.getUsers( data => { this.setState({currentUser: data.filter(usr => usr.username === name)[0]}) });
-  }
+  // setCurrentUserByName (name) {
+  //   helpers.getUsers( data => { this.setState({currentUser: data.filter(usr => usr.username === name)[0]}) });
+  // }
 
   retrieveListings (category) {
     helpers.getListings( category, data => this.setState({listings: data}) );
@@ -70,14 +70,13 @@ class App extends React.Component {
   }
 
   loggedIn(user){
+    console.log(user);
     if (user) {
       this.setState({
         user: user
       });
     }
   }
-
-
 
   render () {
     return (
@@ -100,15 +99,15 @@ class App extends React.Component {
         </Grid>
         <NewListing categories={this.state.categories}
                     navCategory={this.state.navCategory}
-                    user={this.state.currentUser}
+                    user={this.state.currentUserId}
                     clickHandler={this.sendListing.bind(this)}/>
         <button id="postButton" type="button" onClick={this.sendListing.bind(this)}>POST</button>
         <p>
-          {this.state.loggedIn ? (
+          {this.state.currentUserId ? (
             <a href="mailto:someone@example.com?Subject=Hello%20again" >Send mail!</a>) : 
             (
               <div>
-                <a href="/api/auth/github/" onClick={this.loggedIn.bind(this)}>Login</a>
+                <a href="/api/auth/github/" onClick={helpers.userAuth(this.loggedIn.bind(this))}>Login</a>
               </div>
             ) 
           }

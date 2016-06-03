@@ -8,15 +8,15 @@ let getCategories = callback => {
   });
 };
 
-let getUsers = callback => {
-  $.ajax({
-    url: '/api/users',
-    method: 'GET',
-    contentType: 'application/json',
-    success: data => callback(data),
-    error: err => console.log( 'Error getting users from server.', err)
-  });
-};
+// let getUsers = callback => {
+//   $.ajax({
+//     url: '/api/users',
+//     method: 'GET',
+//     contentType: 'application/json',
+//     success: data => callback(data),
+//     error: err => console.log( 'Error getting users from server.', err)
+//   });
+// };
 
 let getListings = (category, callback) => {
   $.ajax({
@@ -40,12 +40,12 @@ let postListing = (listing, callback) => {
   });
 };
 
-let userAuth = () => {
+let userAuth = (callback) => {
 
   $.ajax({
     url: '/api/auth/github',
     method: 'GET',
-    contentType: 'application/json',
+    headers: {'Access-Control-Allow-Origin': '*'},
     success: data => {
       console.log('GET success', data);
       callback(data);
@@ -59,5 +59,5 @@ let userAuth = () => {
   });
 };
 
-export default { getCategories, getUsers, getListings, postListing };
+export default { getCategories, getListings, postListing, userAuth };
 
