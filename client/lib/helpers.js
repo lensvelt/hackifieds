@@ -40,5 +40,24 @@ let postListing = (listing, callback) => {
   });
 };
 
+let userAuth = () => {
+
+  $.ajax({
+    url: '/api/auth/github',
+    method: 'GET',
+    contentType: 'application/json',
+    success: data => {
+      console.log('GET success', data);
+      callback(data);
+    },
+    error: (xhr, ajaxOptions, thrownException) => {
+      console.log('Client GET error');
+      console.log('XHR: ', xhr);
+      console.log('ajaxOptions: ', ajaxOptions);
+      console.log('Exception: ', thrownException);
+    }
+  });
+};
+
 export default { getCategories, getUsers, getListings, postListing };
 

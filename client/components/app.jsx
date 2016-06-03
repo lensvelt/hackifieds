@@ -16,19 +16,9 @@ class App extends React.Component {
       users: [],
       listings: [],
       navCategory: 'Rent',
-
       activeFilter: 'All',
-<<<<<<< 2bcb928bd7938d2dae975059971376460c6e139c
-<<<<<<< ac7969e830ba237c0ba518b7863776c828ed8045
       activeListing: null,
       currentUser: {}
-=======
-      activeListing: null
-=======
-      activeListing: null,
->>>>>>> Various Passport Github oAuth changes
-      loggedIn: false
->>>>>>> Working on getting github authentication to work; still need to finish implementing changing of loggedIn State when redirected from github back to homepage
     };
   }
 
@@ -79,11 +69,12 @@ class App extends React.Component {
     this.setState({ activeListing: null });
   }
 
-  loggedIn(){
-    this.setState({
-
-      loggedIn: true
-    });
+  loggedIn(user){
+    if (user) {
+      this.setState({
+        user: user
+      });
+    }
   }
 
 
@@ -104,7 +95,6 @@ class App extends React.Component {
                   activeFilter={this.state.activeFilter}
                   activeListing={this.state.activeListing}
                   listings={this.state.listings}/>
-<<<<<<< ac7969e830ba237c0ba518b7863776c828ed8045
             </Col>
           </Row>
         </Grid>
@@ -112,9 +102,6 @@ class App extends React.Component {
                     navCategory={this.state.navCategory}
                     user={this.state.currentUser}
                     clickHandler={this.sendListing.bind(this)}/>
-=======
-        <Filter listings={this.state.listings}/>
-        <button id="getButton" type="button" onClick={this.retrieveListings.bind(this)}>GET</button>
         <button id="postButton" type="button" onClick={this.sendListing.bind(this)}>POST</button>
         <p>
           {this.state.loggedIn ? (
@@ -126,7 +113,6 @@ class App extends React.Component {
             ) 
           }
         </p>
->>>>>>> Working on getting github authentication to work; still need to finish implementing changing of loggedIn State when redirected from github back to homepage
       </div>
     );
   }

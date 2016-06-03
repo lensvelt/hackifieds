@@ -115,20 +115,13 @@ passport.use(new github({
 ));
 
 app.get('/api/auth/github',
- 
-  passport.authenticate('github', { scope: [ 'user:email' ] }),
-    function(req, res) {
-      console.log(req.isAuthenticated());
-    }
-  );
-  
-
-
+  passport.authenticate('github', { scope: [ 'user:email' ] }));
 
 app.get('/auth/github/callback', 
   passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
-    console.log("hi");
+    console.log(req);
+    console.log("===================================================", req.session.passport.user);
     // Successful authentication, redirect home.
     res.redirect('/');
   });
