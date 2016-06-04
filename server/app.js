@@ -50,8 +50,17 @@ app.use(passport.session());
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+
+passport.deserializeUser(function(userId, done) {
+  db.User.find({where: {userId: userId}})
+    .then(function(user) {
+      console.log("USER", user);
+      done(null, user);
+    })
+    .catch(function(err) {
+      console.error("ERROR=============", err);
+      done(err);
+    });
 });
 
 // parse application/json
@@ -75,7 +84,6 @@ passport.use(new github({
   callbackURL: 'http://127.0.0.1:3000/auth/github/callback'
 },
   function(accessToken, refreshToken, profile, done) {
-    console.log(profile);
     db.User.findOrCreate({where: {username: profile.username}})
            .spread(function(user, created) {
              return done(null, user);
@@ -86,13 +94,7 @@ passport.use(new github({
 app.get('/api/auth/github',
   passport.authenticate('github', { scope: [ 'user:email' ] }));
 
-app.get('/auth/github/callback', 
-  passport.authenticate('github', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, send userId of authenticated user
-    res.send({ userId: req.session.passport.user.dataValues.userId });
-  });
-
+app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/login' }));
 
 // routing: handle endpoint requests from client
 app.route('/api/listings')

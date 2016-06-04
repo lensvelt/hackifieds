@@ -107,7 +107,7 @@ class App extends React.Component {
             <a href="mailto:someone@example.com?Subject=Hello%20again" >Send mail!</a>) : 
             (
               <div>
-                <a href="/api/auth/github/" onClick={helpers.userAuth(this.loggedIn.bind(this))}>Login</a>
+                <a href="/api/auth/github/" onClick={() => helpers.userAuth(this.loggedIn.bind(this))}>Login</a>
               </div>
             ) 
           }
