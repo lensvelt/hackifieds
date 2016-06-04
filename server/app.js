@@ -51,16 +51,9 @@ passport.serializeUser(function(user, done) {
   done(null, user);
 });
 
-passport.deserializeUser(function(userId, done) {
-  db.User.find({where: {userId: userId}})
-    .then(function(user) {
-      console.log("USER", user);
-      done(null, user);
-    })
-    .catch(function(err) {
-      console.error("ERROR=============", err);
-      done(err);
-    });
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
 });
 
 // parse application/json
